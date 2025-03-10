@@ -12,7 +12,7 @@
 	branch = kirkstone
 [submodule "layers/meta-balena"]
 	path = layers/meta-balena
-	url = https://github.com/balena-os/meta-balena.git
+	url = https://github.com/2bd-ventures/meta-balena
 	branch = master
 [submodule "balena-yocto-scripts"]
 	path = balena-yocto-scripts
