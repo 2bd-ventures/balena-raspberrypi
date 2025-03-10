@@ -27,4 +27,4 @@ FILES:${PN} += " \
     ${bindir}/stick_startup.sh \
     "
 
-COMPATIBLE_MACHINE = "raspberrypi3"
+COMPATIBLE_MACHINE = "(raspberrypi.*)"
