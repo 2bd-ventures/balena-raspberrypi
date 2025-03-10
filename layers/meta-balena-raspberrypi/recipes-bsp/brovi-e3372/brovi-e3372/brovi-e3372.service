@@ -1,0 +1,10 @@
+[Unit]
+Description=Brovi E3372 Stick
+DefaultDependencies=no
+Before=local-fs.target
+
+[Service]
+ExecStart=/usr/bin/stick_startup.sh
+
+[Install]
+WantedBy=sysinit.target
