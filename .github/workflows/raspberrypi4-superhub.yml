@@ -46,7 +46,7 @@ permissions:
 jobs:
   yocto:
     name: Yocto
-    uses: balena-os/balena-yocto-scripts/.github/workflows/yocto-build-deploy.yml@4e8d58a64e996869301c996fd61aafe7496ebafc
+    uses: balena-os/balena-yocto-scripts/.github/workflows/yocto-build-deploy.yml@2649a8d9024a2986d092dff178da9bd14c39f189
     # Prevent duplicate workflow executions for pull_request (PR) and pull_request_target (PRT) events.
     # Both PR and PRT will be triggered for the same pull request, whether it is internal or from a fork.
     # This condition will prevent the workflow from running twice for the same pull request while
@@ -61,3 +61,11 @@ jobs:
       deploy-environment: ${{ inputs.deploy-environment || 'balena-cloud.com' }}
       # Allow overriding the meta-balena ref for workflow dispatch events
       meta-balena-ref: ${{ inputs.meta-balena-ref || '' }}
+      # worker_type defaults to testbot
+      # worker_fleets defaults to balena/testbot-rig,balena/testbot-rig-aarch64,balena/testbot-rig-partners,balena/testbot-rig-x86,balena/testbot-rig-partners-x86
+      test_matrix: >
+        {
+          "test_suite": ["os","cloud","hup"],
+          "environment": ["balena-cloud.com"],
+          "runs_on": [["self-hosted"]]
+        }

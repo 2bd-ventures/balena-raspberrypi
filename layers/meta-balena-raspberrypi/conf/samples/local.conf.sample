@@ -3,10 +3,8 @@
 #MACHINE ?= "raspberrypi2"
 #MACHINE ?= "raspberrypi3"
 #MACHINE ?= "raspberrypi3-64"
-#MACHINE ?= "revpi-connect"
 #MACHINE ?= "revpi-connect-s"
 #MACHINE ?= "revpi-connect-4"
-#MACHINE ?= "revpi-core-3"
 #MACHINE ?= "raspberrypi4-64"
 #MACHINE ?= "raspberrypi400-64"
 #MACHINE ?= "raspberrypicm4-ioboard"
@@ -28,6 +26,7 @@ GPU_MEM = "16"
 DISABLE_VC4GRAPHICS = "1"
 DISABLE_VC4GRAPHICS:remove:raspberrypi3-64 = "1"
 DISABLE_VC4GRAPHICS:remove:raspberrypi4-64 = "1"
+DISABLE_VC4GRAPHICS:remove:raspberrypi5 = "1"
 DISABLE_VC4GRAPHICS:remove:raspberrypi0-2w-64 = "1"
 DISABLE_VC4GRAPHICS:remove:revpi-connect-s = "1"
 
@@ -100,3 +99,8 @@ BB_DISKMON_DIRS = "\
 CONF_VERSION = "2"
 
 HOSTTOOLS += "docker iptables"
+
+LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
+
+# CycloneDX SBOM and VEX generation
+INHERIT += "cyclonedx-export"

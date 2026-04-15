@@ -43,10 +43,6 @@ do_deploy:append:revpi-connect-4() {
 	echo "dtparam=ant2" >> ${DEPLOYDIR}/bootfiles/config.txt
 }
 
-do_deploy:append:raspberrypicm4-ioboard-sb() {
-    echo "dtoverlay=dwc2,dr_mode=host" >> ${DEPLOYDIR}/bootfiles/config.txt
-}
-
 do_deploy:append:raspberrypi3-unipi-neuron() {
 	# Use the dt overlays required by the UniPi Neuron family of boards
 	echo "dtoverlay=neuronee" >> ${DEPLOYDIR}/bootfiles/config.txt
@@ -80,20 +76,16 @@ do_deploy:append:raspberrypi4-unipi-neuron() {
 	echo "dtoverlay=neuron-spi-new" >> ${DEPLOYDIR}/bootfiles/config.txt
 }
 
-do_deploy:append:revpi-core-3() {
-    cat >> ${DEPLOYDIR}/bootfiles/config.txt << EOF
-
-# serial port needs to be kept clean for RS485 communication
-avoid_warnings=1
-
-dtoverlay=revpi-core
-
-EOF
-    # prevent u-boot logging on uart
-    sed -i 's/enable_uart=1//' ${DEPLOYDIR}/bootfiles/config.txt
-}
-
 # On Raspberry Pi 3 and Raspberry Pi Zero WiFi, serial ttyS0 console is only
 # usable if ENABLE_UART = 1. On OS development images, we want serial console
 # available, production devices can enable it with a configuration variable.
 ENABLE_UART ?= "${@bb.utils.contains('DISTRO_FEATURES','osdev-image','1','0',d)}"
+
+do_deploy:append:raspberrypi4() {
+	# Enable otg_mode on CM4 as per https://www.raspberrypi.com/documentation/computers/config_txt.html#otg_mode-raspberry-pi-4-only
+	cat >> ${DEPLOYDIR}/bootfiles/config.txt << EOF
+
+[cm4]
+otg_mode=1
+EOF
+}

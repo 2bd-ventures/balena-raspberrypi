@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:${THISDIR}/${MACHINE}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}_${LINUX_VERSION}:${THISDIR}/${PN}:${THISDIR}/${MACHINE}:"
 
 SRC_URI:append:fincm3 = " \
 	file://0001-overlays-fin-add-internal-pull-ups-to-i2c_soft.patch \
@@ -17,7 +17,6 @@ SRC_URI:append:raspberrypi4-superhub = " \
 SRC_URI:append = " \
 	file://0002-wireless-wext-Bring-back-ndo_do_ioctl-fallback.patch \
 	file://0001-Add-npe-x500-m3-overlay.patch \
-	file://0010-dts-overlays-Add-UniPi-overlays.patch \
 	file://0001-seeed-studio-can-bus-v2-Add-dtbo-for-this-can-bus.patch \
 	file://0011-USB-serial-Add-support-for-more-Quectel-modules.patch \
 	file://0001-waveshare-sim7600-Add-dtbo-for-this-modem.patch \
@@ -27,13 +26,6 @@ SRC_URI:append = " \
 SRC_URI:append:rt-rpi-300 = " \
 	file://rt-rpi-300-Add-changes-for-this-dt.patch \
 	file://rt-rpi-Add-ch-432t-driver-for-this-chip.patch \
-"
-
-# BalenaOS already disables gcc plugins,
-# however the unipi-neuron adds an extra module
-# which seems to override the default configuration
-SRC_URI:append:raspberrypi3-unipi-neuron = " \
-	file://0001-pi3neuron-disable-gccplugins.patch \
 "
 
 BALENA_CONFIGS:append = " fbtft"
@@ -73,9 +65,6 @@ BALENA_CONFIGS[pca955_gpio_expander] = " \
     CONFIG_GPIO_PCA953X=y \
     CONFIG_GPIO_PCA953X_IRQ=y \
     "
-
-KERNEL_MODULE_PROBECONF += "rtl8192cu"
-module_conf_rtl8192cu = "blacklist rtl8192cu"
 
 # requested by customer (support for Kontron PLD devices)
 BALENA_CONFIGS:append = " gpio_i2c_kempld"
@@ -213,3 +202,36 @@ do_compile:append() {
         oe_runmake dtbs CC="${KERNEL_CC} $cc_extra " LD="${KERNEL_LD}" ${KERNEL_EXTRA_ARGS}
     fi
 }
+
+# we need to clean up all the following RPI_KERNEL_DEVICETREE changes when we switch to a newer 6.x kernel
+RPI_KERNEL_DEVICETREE = " \
+    bcm2708-rpi-zero.dtb \
+    bcm2708-rpi-zero-w.dtb \
+    bcm2708-rpi-b.dtb \
+    bcm2708-rpi-b-rev1.dtb \
+    bcm2708-rpi-b-plus.dtb \
+    bcm2709-rpi-2-b.dtb \
+    bcm2710-rpi-2-b.dtb \
+    bcm2710-rpi-3-b.dtb \
+    bcm2710-rpi-3-b-plus.dtb \
+    bcm2710-rpi-zero-2.dtb \
+    bcm2711-rpi-4-b.dtb \
+    bcm2711-rpi-400.dtb \
+    bcm2708-rpi-cm.dtb \
+    bcm2710-rpi-cm3.dtb \
+    bcm2711-rpi-cm4.dtb \
+    bcm2711-rpi-cm4s.dtb \
+"
+
+RPI_KERNEL_DEVICETREE:raspberrypi0-2w-64 = " \
+    broadcom/bcm2710-rpi-zero-2.dtb \
+    broadcom/bcm2710-rpi-cm3.dtb \
+"
+
+# Only include arm64 dtbs for rt-rpi-300
+RPI_KERNEL_DEVICETREE:rt-rpi-300 = " \
+    broadcom/bcm2711-rpi-4-b.dtb \
+    broadcom/bcm2711-rpi-400.dtb \
+    broadcom/bcm2711-rpi-cm4.dtb \
+    broadcom/bcm2711-rpi-cm4s.dtb \
+"
