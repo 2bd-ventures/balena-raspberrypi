@@ -110,6 +110,7 @@ IMAGE_INSTALL:remove:raspberrypi5 = " u-boot"
 IMAGE_INSTALL:append:raspberrypi5 = " grub-editenv"
 IMAGE_INSTALL:append:raspberrypi3 = " brovi-e3372"
 IMAGE_INSTALL:append:raspberrypi5 = " brovi-e3372"
+IMAGE_INSTALL:append:raspberrypicm4-ioboard-sb = " brovi-e3372"
 
 do_rootfs[depends] += "${@oe.utils.conditional('MACHINE','raspberrypicm4-ioboard-sb',' virtual/balena-bootloader:do_deploy','',d)}"
 do_image_balenaos_img[depends] += "${@oe.utils.conditional('MACHINE','raspberrypicm4-ioboard-sb',' virtual/balena-bootloader:do_deploy','',d)}"
